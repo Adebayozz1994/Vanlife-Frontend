@@ -17,19 +17,44 @@ import Pricing from "./Components/Pricing";
 import Photos from "./Components/Photos";
 import Signup from "./Components/Signup";
 import Login from "./Components/Login";
+import { useState } from "react";
 
 
 
 function App() {
-  
+  const [DeferredPrompt, setDeferredPrompt] = useState("")
+  useEffect(() => {
+    if ("ServiceWorker" in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          })
+      })
+    }
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault();
+      setDeferredPrompt(event);
+    };
 
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+    // console.log();
+  })
   return (
     <>
-     <Routes>
-      <Route path="/" element={<Login/>} />
-        <Route path="/signin" element={<Signup/>} />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signin" element={<Signup />} />
         <Route path="/" element={<Layout />}>
-          <Route path="/home" element={<Home/>} />
+          <Route path="/home" element={<Home />} />
           <Route path="/home" element={<Navigate to="/" />} />
           <Route path="/van" element={<Navigate to="/vans" />} />
           <Route path="/signup" element={<Navigate to="/signin" />} />
