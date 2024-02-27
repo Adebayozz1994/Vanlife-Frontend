@@ -17,7 +17,7 @@ import Pricing from "./Components/Pricing";
 import Photos from "./Components/Photos";
 import Signup from "./Components/Signup";
 import Login from "./Components/Login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 
